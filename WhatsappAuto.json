@@ -1,0 +1,231 @@
+{
+  "name": "My workflow 3",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "whatsapp",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [-496, 64],
+      "id": "a2fdc8ba-c872-459d-8a40-ef4af286331c",
+      "name": "Webhook",
+      "webhookId": "8bc1fea9-7e1c-4cdd-806a-8a8dfa9659f1"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_ID",
+          "mode": "list"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Sheet2",
+          "mode": "list"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{$node[\"Webhook\"].json.body.ProfileName}}",
+            "Phone": "={{$node[\"Webhook\"].json.body.From}}",
+            "Message": "={{$node[\"Webhook\"].json.body.Body}}",
+            "Time": "={{$now}}"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [-256, 48],
+      "id": "8609e403-832d-4fa7-991b-5b4197052701",
+      "name": "Append row in sheet",
+      "credentials": {}
+    },
+
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.twilio.com/2010-04-01/Accounts/YOUR_TWILIO_SID/Messages.json",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            { "name": "To", "value": "={{$node[\"Webhook\"].json.body.From}}" },
+            { "name": "From", "value": "whatsapp:+14155238886" },
+            { "name": "Body", "value": "Hi 👋 Welcome!  1️⃣ Courses   2️⃣ Fees   3️⃣ Contact" }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [368, 16],
+      "id": "51b62e23-cfcf-42b8-9af1-af4936ea1350",
+      "name": "HTTP Request1",
+      "credentials": {}
+    },
+
+    {
+      "parameters": {
+        "conditions": {
+          "conditions": [
+            {
+              "leftValue": "={{$node[\"Webhook\"].json.body.Body.trim()}}",
+              "rightValue": "Hi",
+              "operator": { "type": "string", "operation": "equals" }
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "position": [-80, 48],
+      "id": "43e89468-d01d-4e65-bc8e-c468bd65dcfe",
+      "name": "If"
+    },
+
+    {
+      "parameters": {
+        "conditions": {
+          "conditions": [
+            {
+              "leftValue": "={{$node[\"Webhook\"].json.body.Body.trim()}}",
+              "rightValue": "1",
+              "operator": { "type": "string", "operation": "equals" }
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "position": [144, -176],
+      "id": "16b2ddf3-ce06-4a51-9082-9f3e876aefff",
+      "name": "If( for 1)"
+    },
+
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.twilio.com/2010-04-01/Accounts/YOUR_TWILIO_SID/Messages.json",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            { "name": "To", "value": "={{$node[\"Webhook\"].json.body.From}}" },
+            { "name": "From", "value": "whatsapp:+14155238886" },
+            { "name": "Body", "value": "We offer:\n\n• Web Development\n• Python\n• AI\n\nWhich one are you interested in?" }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [-32, 320],
+      "id": "c4127178-2721-4ba8-875b-4c39ee7d3740",
+      "name": "HTTP Request",
+      "credentials": {}
+    },
+
+    {
+      "parameters": {
+        "conditions": {
+          "conditions": [
+            {
+              "leftValue": "={{$node[\"Webhook\"].json.body.Body.trim()}}",
+              "rightValue": "2",
+              "operator": { "type": "string", "operation": "equals" }
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "position": [592, 48],
+      "id": "78e22867-18bd-40a5-8fc7-c651931877e5",
+      "name": "If(for 2)"
+    },
+
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.twilio.com/2010-04-01/Accounts/YOUR_TWILIO_SID/Messages.json",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            { "name": "To", "value": "={{$node[\"Webhook\"].json.body.From}}" },
+            { "name": "From", "value": "whatsapp:+14155238886" },
+            { "name": "Body", "value": "Our fees start from ₹5000 💸\nFlexible payment options available.\nMessage 3 for contact." }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [144, 256],
+      "id": "b709dafb-08ce-4add-b4a3-c2e3b0f068dd",
+      "name": "HTTP Request2",
+      "credentials": {}
+    },
+
+    {
+      "parameters": {
+        "conditions": {
+          "conditions": [
+            {
+              "leftValue": "={{$node[\"Webhook\"].json.body.Body.trim()}}",
+              "rightValue": "3",
+              "operator": { "type": "string", "operation": "equals" }
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "position": [688, 256],
+      "id": "46b5d177-29cc-4f62-91ad-5f5df3b1ba7d",
+      "name": "If1"
+    },
+
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.twilio.com/2010-04-01/Accounts/YOUR_TWILIO_SID/Messages.json",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            { "name": "To", "value": "={{$node[\"Webhook\"].json.body.From}}" },
+            { "name": "From", "value": "whatsapp:+14155238886" },
+            { "name": "Body", "value": "📞 Contact: 8179353134\n📍 SRKR Engineering College, Bhimavaram\nWe’ll be happy to help 😊" }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [384, 560],
+      "id": "0a411989-e594-4aa2-96fa-5fdf34dbc25a",
+      "name": "HTTP Request3",
+      "credentials": {}
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [[{ "node": "Append row in sheet", "type": "main", "index": 0 }]]
+    },
+    "Append row in sheet": {
+      "main": [[
+        { "node": "If", "type": "main", "index": 0 },
+        { "node": "If( for 1)", "type": "main", "index": 0 },
+        { "node": "If(for 2)", "type": "main", "index": 0 },
+        { "node": "If1", "type": "main", "index": 0 }
+      ]]
+    },
+    "If": { "main": [[{ "node": "HTTP Request1", "type": "main", "index": 0 }]] },
+    "If( for 1)": { "main": [[{ "node": "HTTP Request", "type": "main", "index": 0 }]] },
+    "If(for 2)": { "main": [[{ "node": "HTTP Request2", "type": "main", "index": 0 }]] },
+    "If1": { "main": [[{ "node": "HTTP Request3", "type": "main", "index": 0 }]] }
+  }
+}

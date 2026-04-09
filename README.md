@@ -1,6 +1,6 @@
 # WhatsApp Automation Bot (n8n + Twilio)
 
-## 🚀 Overview
+##  Overview
 
 This project is a WhatsApp chatbot built using n8n and Twilio API.
 
@@ -11,7 +11,7 @@ It can:
 * Store user data in Google Sheets
 * Handle multiple user inputs
 
-## 🛠 Tech Stack
+##  Tech Stack
 
 * n8n (Workflow Automation)
 * Twilio WhatsApp API
